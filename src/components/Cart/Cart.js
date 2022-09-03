@@ -1,5 +1,6 @@
 import { prettyDOM } from '@testing-library/react';
 import React from 'react';
+import Shop from '../Shop/Shop';
 import './Cart.css';
 
 const Cart = ({cart}) => {
@@ -11,7 +12,9 @@ const Cart = ({cart}) => {
         shipping = shipping + product.shipping;
     }
 
-    const tax = (total * 0.1).toFixed(2);
+    const tax = parseFloat((total * 0.1).toFixed(2));
+
+    const grandTotal = total + shipping + tax;
 
 
     return (
@@ -21,7 +24,7 @@ const Cart = ({cart}) => {
                 <p>Total Price: ${total}</p>
                 <p>Total Shipping Charge:${shipping}</p>
                 <p>Tax: ${tax}</p>
-                <h5>Grand Total:$</h5>
+                <h5>Grand Total:${grandTotal}</h5>
         </div>
     );
 };
