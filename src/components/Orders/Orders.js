@@ -1,6 +1,8 @@
 import React from 'react';
 import useCart from '../../hooks/useCart';
+import Cart from '../Cart/Cart';
 import useProducts from '../../hooks/useProducts';
+import ReviewItem from '../ReviewItem/ReviewItem';
 
 
 const Orders = () => {
@@ -8,9 +10,15 @@ const Orders = () => {
     const [cart, setCart] = useCart(products);
 
     return (
-        <div> 
-            <h1>Orders {products.length}</h1>
-            <p>Cart: {cart.length}</p>
+        <div className='shop-container'>
+            <div className="product-container">
+            {
+                cart.map(product => <ReviewItem key={product.id} product={product}></ReviewItem>)
+            }
+            </div> 
+            <div className="cart-container">
+                <Cart cart={cart}></Cart>
+            </div>
         </div>
     );
 };
