@@ -43,3 +43,7 @@
     transition: 0.4s;
     color: white;
 }
+
+.cart-icon{
+    margin-left: 4px;
+}
