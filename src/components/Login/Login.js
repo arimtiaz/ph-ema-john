@@ -1,47 +1,58 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import auth from '../../firebase.init';
-import './Login.css'
+import './Login.css';
 
 const Login = () => {
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const [
         signInWithEmailAndPassword,
         user,
         loading,
         error,
-      ] = useSignInWithEmailAndPassword(auth);
+    ] = useSignInWithEmailAndPassword(auth);
+    
+    const navigate = useNavigate();
+    const location = useLocation();
+    const from = location.state?.from?.pathname || '/';
 
-    const handleEmailBlur = e =>{
-        setEmail(e.target.value)
-    }
-    const handlePasswordBlur = e =>{
-        setPassword(e.target.value)
+    const handleEmailBlur = event => {
+        setEmail(event.target.value);
     }
 
-    const handleUserSignIn = e =>{
-        e.preventDefault();
+    const handlePasswordBlur = event => {
+        setPassword(event.target.value);
+    }
+
+    if (user) {
+        navigate(from, {replace: true});
+    }
+
+    const handleUserSignIn = event => {
+        event.preventDefault();
+        signInWithEmailAndPassword(email, password);
     }
 
     return (
         <div className='form-container'>
             <div>
-                <h1 className='form-title'>Login</h1>
-                <form onBlur={handleUserSignIn}>
-                <div className="input-group">
-                        <label htmlFor="email">Email:</label>
-                        <input onBlur={handleEmailBlur} type="email" name="" id="" required/>
-                </div>
-                <div className='input-group'>
-                    <label htmlFor="password">Password:</label>
-                    <input type="password" name="" id="" required/>
-                </div>
-                <input onBlur={handlePasswordBlur} className='form-submit' type="submit" value="Login" />
-                <p style={{color: "red"}}>{error?.message}</p>
+                <h2 className='form-title'>Login</h2>
+                <form onSubmit={handleUserSignIn}>
+                    <div className="input-group">
+                        <label htmlFor="email">Email</label>
+                        <input onBlur={handleEmailBlur} type="email" name="email" id="" required />
+                    </div>
+                    <div className="input-group">
+                        <label htmlFor="password">Password</label>
+                        <input onBlur={handlePasswordBlur} type="password" name="password" id="" required />
+                    </div>
+                    <p style={{ color: 'red' }}>{error?.message}</p>
+                    {
+                        loading && <p>Loading...</p>
+                    }
+                    <input className='form-submit' type="submit" value="Login" />
                 </form>
                 <p>
                     New to Ema-John? <Link className='form-link' to="/signup">Create an account</Link>
